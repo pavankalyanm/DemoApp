@@ -2,7 +2,11 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:login/main.dart';
+import 'package:login/screens/Animation/FadeAnimation.dart';
 import 'package:login/screens/cart.dart';
+import 'package:login/screens/sidebar/pages/homepage.dart';
+import 'package:login/screens/sidebar/sidebar_layout.dart';
 
 
 class Product extends StatelessWidget {
@@ -35,19 +39,32 @@ class ProductScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(
-                    Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
                     color: Colors.white,
+                    onPressed:(){
+                       Navigator.push(context, 
+                        MaterialPageRoute(builder: (context)=>SideBarLayout())
+                       );
+                    },
+                    
                   ),
+                  
                   SizedBox(
                     width: 24.0,
                     height: 24.0,
                     child: Stack(
                       children: <Widget>[
-                        Icon(
-                          Icons.shopping_basket,
-                          color: Colors.white,
-                        ),
+                        IconButton(
+                    icon: const Icon(Icons.shopping_basket),
+                    color: Colors.white,
+                    onPressed:(){
+                       Navigator.push(context, 
+                        MaterialPageRoute(builder: (context)=>MyCart())
+                       );
+                      },
+                    
+                     ),
                         Align(
                           alignment: Alignment.topRight,
                           child: Container(
@@ -90,7 +107,7 @@ class _WidgetPageViewHeaderState extends State<WidgetPageViewHeader> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     var heightImage = mediaQuery.size.height / 1.5;
-    return Container(
+    return  Container(
       height: heightImage,
       child: Stack(
         children: <Widget>[
@@ -132,7 +149,7 @@ class _WidgetPageViewHeaderState extends State<WidgetPageViewHeader> {
       height: isActive ? 16 : 12,
       width: isActive ? 16 : 12,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         border: isActive ? Border.all(color: Colors.white) : null,
       ),
       padding: EdgeInsets.all(isActive ? 4.0 : 0.0),
@@ -155,13 +172,16 @@ class WidgetDescription extends StatelessWidget {
     return Container(
       height: mediaQuery.size.height / 2.3,
       width: double.infinity,
+      child: FadeAnimation(1,Container(
       decoration: BoxDecoration(
-        color: Color(0xFFE0E0E0),
+        color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(48.0),
-          topRight: Radius.circular(48.0),
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
         ),
       ),
+     
+
       child: Stack(
         children: <Widget>[
           Padding(
@@ -204,12 +224,13 @@ class WidgetDescription extends StatelessWidget {
           ),
         ],
       ),
+       )),
     );
   }
 
   Widget _buildWidgetProductPrice(BuildContext context) {
     return Text(
-      'Rp 500.000',
+      'Rs.500',
       style: Theme.of(context).textTheme.body1.merge(TextStyle(fontSize: 16.0)),
     );
   }
@@ -222,7 +243,7 @@ class WidgetDescription extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text(
-                'combo of s shirts',
+                'COMBO OF 5 SHIRTS',
                 style: Theme.of(context).textTheme.title,
               ),
             ),
@@ -230,7 +251,7 @@ class WidgetDescription extends StatelessWidget {
               direction: Axis.vertical,
               children: <Widget>[
                 Icon(Icons.share),
-                SizedBox(height: 16.0),
+                SizedBox(height: 10.0),
                 Icon(Icons.favorite_border),
               ],
             ),
@@ -446,13 +467,19 @@ class WidgetAddToBag extends StatelessWidget {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     return Container(
-      height: (mediaQuery.size.height - mediaQuery.size.height / 1.1),
+      height: 60,
+      width: 300,
       child: Material(
         type: MaterialType.canvas,
-        color: Color(0xFF32312D),
+        color: Colors.cyan,
+      
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(36.0),
-          topRight: Radius.circular(36.0),
+          topLeft: Radius.circular(50.0),
+          topRight: Radius.circular(50.0),
+          bottomLeft: Radius.circular(50.0),
+          bottomRight: Radius.circular(50.0),
+        
+
         ),
         child: InkWell(
           onTap: () {
@@ -460,7 +487,7 @@ class WidgetAddToBag extends StatelessWidget {
               context: context,
               backgroundColor: Colors.transparent,
               builder: (context) {
-                return WidgetMyCart();
+                return MyCart();
               },
             );
           },
@@ -469,13 +496,13 @@ class WidgetAddToBag extends StatelessWidget {
               Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
+                  padding: const EdgeInsets.only(top: 18.0),
                   child: Text(
-                    'Add to bag +',
+                    'Add to cart ',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),

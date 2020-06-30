@@ -4,6 +4,7 @@ import 'package:login/screens/authenticate/login.dart';
 import 'package:login/screens/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login/screens/authenticate/authservice.dart';
+import 'package:login/shared/loading.dart';
 
 class Signup extends StatefulWidget {
   final Function widview;
@@ -16,15 +17,17 @@ class _SignupState extends State<Signup> {
 
   final _formKey=GlobalKey<FormState>();
   final Authservice _auth = Authservice();
-  String email="";
-  String password="";
+  
   String fname="";
   String lname="";
   String error="";
+  String email="";
+  String password="";
+  bool loading=false;
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-  return Scaffold(
+  return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         
@@ -36,13 +39,13 @@ class _SignupState extends State<Signup> {
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    top: -80,
-                    height: 300,
-                    width: width,
+                    top: 80,
+                    height: 150,
+                    width: 250,
                     child: FadeAnimation(1, Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/background.png'),
+                          image: AssetImage('assets/images/signup.png'),
                           fit: BoxFit.fill
                         )
                       ),
@@ -56,7 +59,7 @@ class _SignupState extends State<Signup> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  FadeAnimation(1.5, Text("Signup", style: TextStyle(color: Color.fromRGBO(49, 39, 79, 1), fontWeight: FontWeight.bold, fontSize: 30),)),
+                  FadeAnimation(1.5, Text("Signup", style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold, fontSize: 30),)),
                   SizedBox(height: 30,),
                   FadeAnimation(1.7, Container(
                     decoration: BoxDecoration(
@@ -64,7 +67,7 @@ class _SignupState extends State<Signup> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Color.fromRGBO(196, 135, 198, .3),
+                          color: Colors.cyan[100],
                           blurRadius: 20,
                           offset: Offset(0, 10),
                         )
@@ -85,7 +88,7 @@ class _SignupState extends State<Signup> {
                             
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: "firstname",
+                              hintText: "Firstname",
                               hintStyle: TextStyle(color: Colors.grey)
                             ),
                             validator:(val)=> val.isEmpty? "enter firstname":null ,
@@ -106,7 +109,7 @@ class _SignupState extends State<Signup> {
                             
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: "lastname",
+                              hintText: "Lastname",
                               hintStyle: TextStyle(color: Colors.grey)
                             ),
                             validator:(val)=> val.isEmpty? "enter lastname":null ,
@@ -169,17 +172,29 @@ class _SignupState extends State<Signup> {
                     ),
                     child:RaisedButton(
                       
-                      color: Color.fromRGBO(49, 39, 79, 1),
+                      color: Colors.cyan,
                     child: Center(
                       child: Text("REGISTER", style: TextStyle(color: Colors.white),),
                     ),
                     onPressed: ()async{
                       if (_formKey.currentState.validate()) {
+                        
+                          
+                        
                          dynamic result = await _auth.registerWithEmailAndPassword(email, password );
+                        
                          if(result==null){
-                           setState(()=>error ="please supply valid email" 
-                             
+                           setState((){
+                             error ="please supply valid email" ;
+                             loading=false;
+                           }
                            );
+                         }else{
+                            setState(() {
+                             Navigator.push(context, 
+                             MaterialPageRoute(builder: (context)=>Login())
+                           );
+                        });
                          }
 
                          
@@ -196,7 +211,7 @@ class _SignupState extends State<Signup> {
                         );
                       },
                     child: Text("LOGIN", 
-                    style: TextStyle(color: Color.fromRGBO(49, 39, 79, .6)
+                    style: TextStyle(color: Color.fromRGBO(49, 39, 79, .6),fontSize:15 
                     ),
                     )
                     ),

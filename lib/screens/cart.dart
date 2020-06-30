@@ -1,32 +1,114 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:login/screens/address.dart';
 
-class WidgetMyCart extends StatefulWidget {
+ num price=500;
+ num q=1;
+ 
+class WidgetControllerQuantity extends StatefulWidget {
+  
+  final int qty;
+  WidgetControllerQuantity(this.qty);
+
   @override
-  _WidgetMyCartState createState() => _WidgetMyCartState();
+  _WidgetControllerQuantityState createState() =>
+      _WidgetControllerQuantityState();
 }
 
-class _WidgetMyCartState extends State<WidgetMyCart> {
+class _WidgetControllerQuantityState extends State<WidgetControllerQuantity> {
+  int qty;
+
+  @override
+  void initState() {
+    qty = widget.qty;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            if (qty == 1) return;
+            setState(() {
+              qty -= 1;
+            
+              
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Icon(
+              Icons.remove,
+              size: 20.0,
+              color: Colors.black54,
+            ),
+          ),
+        ),
+        Text('$qty'),
+        GestureDetector(
+          onTap: () {
+            if (qty == 10) return;
+            setState(() {
+              qty += 1;
+             
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Icon(
+              Icons.add,
+              size: 20.0,
+              color: Colors.black54,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Cart {
+  String productName;
+  int price;
+  String size;
+  int quantity;
+  String color;
+  String image;
+
+  Cart(
+      {this.productName,
+      this.price,
+      this.size,
+      this.quantity,
+      this.color,
+      this.image});
+}
+
+
+class MyCart extends StatefulWidget {
+  @override
+  _MyCartState createState() => _MyCartState();
+}
+
+class _MyCartState extends State<MyCart> {
+ 
   List<Cart> listMyCart = [];
 
   @override
   void initState() {
+  
     listMyCart
       ..add(Cart(
-          productName: 'blue shirt',
-          price: 89000,
-          size: 'M',
-          quantity: 1,
-          color: 'Black',
-          image: 'assets/images/shirt.jpg'))
-      ..add(Cart(
-          productName: 'black shirt',
-          price: 159000,
+          productName: 'Shirt',
+          price: 500,
           size: 'L',
           quantity: 1,
-          color: 'Maroon',
+          color: 'Black',
           image: 'assets/images/shirt.jpg'));
+      
     super.initState();
   }
 
@@ -69,7 +151,7 @@ class _WidgetMyCartState extends State<WidgetMyCart> {
                   itemCount: listMyCart.length,
                   itemBuilder: (context, index) {
                     Cart cart = listMyCart[index];
-                    String rupiahPrice = "100";
+                    String rupiahPrice = "500";
                         
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -95,7 +177,7 @@ class _WidgetMyCartState extends State<WidgetMyCart> {
                                           fontWeight: FontWeight.w500)),
                                 ),
                                 Text(
-                                  'Rp $rupiahPrice',
+                                  'Rs.$rupiahPrice',
                                   style: Theme.of(context)
                                       .textTheme
                                       .body1
@@ -141,7 +223,8 @@ class _WidgetMyCartState extends State<WidgetMyCart> {
                       style: Theme.of(context).textTheme.body1.merge(
                             TextStyle(color: Colors.grey),
                           )),
-                  Text('Rp 248.000',
+                      
+                  Text('Rs.${price*q}',
                       style: Theme.of(context).textTheme.body1.merge(
                             TextStyle(fontWeight: FontWeight.w600),
                           )),
@@ -151,13 +234,21 @@ class _WidgetMyCartState extends State<WidgetMyCart> {
               SizedBox(
                 width: mediaQuery.width,
                 child: RaisedButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  
+                 ),
+                  onPressed: () {
+                    Navigator.push(context, 
+                  MaterialPageRoute(builder: (context)=>Address())
+                  );
+                  },
                   child: Text(
                     'Check out',
                     style: TextStyle(color: Colors.white),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 12.0),
-                  color: Color(0xFF32312D),
+                  color: Colors.cyan,
                 ),
               )
             ],
@@ -178,87 +269,9 @@ class _WidgetMyCartState extends State<WidgetMyCart> {
                 fontSize: 16.0,
               )),
         ),
-        Text('2 items', style: Theme.of(context).textTheme.caption),
+        Text('1 item', style: Theme.of(context).textTheme.caption),
       ],
     );
   }
 }
 
-
-class WidgetControllerQuantity extends StatefulWidget {
-  final int qty;
-
-  WidgetControllerQuantity(this.qty);
-
-  @override
-  _WidgetControllerQuantityState createState() =>
-      _WidgetControllerQuantityState();
-}
-
-class _WidgetControllerQuantityState extends State<WidgetControllerQuantity> {
-  int qty;
-
-  @override
-  void initState() {
-    qty = widget.qty;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            if (qty == 1) return;
-            setState(() {
-              qty -= 1;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Icon(
-              Icons.remove,
-              size: 20.0,
-              color: Colors.black54,
-            ),
-          ),
-        ),
-        Text('$qty'),
-        GestureDetector(
-          onTap: () {
-            if (qty == 10) return;
-            setState(() {
-              qty += 1;
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Icon(
-              Icons.add,
-              size: 20.0,
-              color: Colors.black54,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Cart {
-  String productName;
-  int price;
-  String size;
-  int quantity;
-  String color;
-  String image;
-
-  Cart(
-      {this.productName,
-      this.price,
-      this.size,
-      this.quantity,
-      this.color,
-      this.image});
-}

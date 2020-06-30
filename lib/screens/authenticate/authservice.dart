@@ -6,6 +6,12 @@ class Authservice{
   User _userFromFirebaseUser(FirebaseUser user){
       return user != null ? User(uid:user.uid):null;
     }
+//listener
+Stream<User> get user{
+  return _auth.onAuthStateChanged
+  .map(_userFromFirebaseUser);
+}
+
   //signin
 Future signInWithEmailAndPassword(String email , String password) async{
   try{
@@ -35,6 +41,15 @@ Future registerWithEmailAndPassword(String email , String password) async{
 }
 
 //signout
+
+Future signOut() async{
+  try{
+    return await _auth.signOut(); 
+  }catch(e){
+     print(e.toString());
+     return null;
+  }
+}
 
   }
   

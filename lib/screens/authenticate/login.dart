@@ -3,6 +3,7 @@ import 'package:login/screens/Animation/FadeAnimation.dart';
 import 'package:login/screens/authenticate/authservice.dart';
 import 'package:login/screens/authenticate/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:login/shared/loading.dart';
 
 class Login extends StatefulWidget {
   
@@ -15,31 +16,32 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
    final Authservice _auth = Authservice();
    final _formKey=GlobalKey<FormState>();
+   bool loading=false;
     String error="";
     String email="";
     String password="";
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
-      body: Form(
+       body: SingleChildScrollView(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 400,
+              height: 350,
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    top: -40,
-                    height: 400,
+                    top: 40,
+                    height: 300,
                     width: width,
                     child: FadeAnimation(1, Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/background.png'),
+                          image: AssetImage('assets/images/log.png'),
                           fit: BoxFit.fill
                         )
                       ),
@@ -53,7 +55,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  FadeAnimation(1.5, Text("Login", style: TextStyle(color: Color.fromRGBO(49, 39, 79, 1), fontWeight: FontWeight.bold, fontSize: 30),)),
+                  FadeAnimation(1.5, Text("Login", style: TextStyle(color: Colors.cyan,fontWeight: FontWeight.bold, fontSize: 30),)),
                   SizedBox(height: 30,),
                   FadeAnimation(1.7, Container(
                     decoration: BoxDecoration(
@@ -61,12 +63,14 @@ class _LoginState extends State<Login> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Color.fromRGBO(196, 135, 198, .3),
+                          color: Colors.cyan[100],
                           blurRadius: 20,
                           offset: Offset(0, 10),
                         )
                       ]
                     ),
+                    child: Form(
+                    key: _formKey,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -107,6 +111,7 @@ class _LoginState extends State<Login> {
                         )
                       ],
                     ),
+                  ),
                   )),
                   SizedBox(height: 20,),
                   FadeAnimation(1.7, Center(child: Text("Forgot Password?", style: TextStyle(color: Color.fromRGBO(196, 135, 198, 1)),))),
@@ -121,16 +126,23 @@ class _LoginState extends State<Login> {
                     ),
                     child:RaisedButton(
                       
-                      color: Color.fromRGBO(49, 39, 79, 1),
+                      color: Colors.cyan,
                     child: Center(
-                      child: Text("Login", style: TextStyle(color: Colors.white),),
+                      child: Text("LOGIN", style: TextStyle(color: Colors.white),),
                     ),
                     onPressed: ()async{
                       if (_formKey.currentState.validate()) {
+                        setState(()=>loading=true );
+                          
+                        
                          dynamic result= await _auth.signInWithEmailAndPassword(email, password);
                          if (result==null){
-                           setState(()=>error ="could not sign in " 
-                             
+                           setState((){
+
+                           error ="could not sign in " ;
+                            loading=false;
+
+                            }
                            );
                          }       
                     }
@@ -158,6 +170,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(color: Colors.red,fontSize: 14.0),
                     ),
                 ],
+                  
               ),
             )
           ],
